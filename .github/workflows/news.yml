@@ -1,0 +1,29 @@
+name: Daily AI News Summary
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 日本時間の朝6時（UTC 21時）
+  workflow_dispatch:       # 手動実行も可能
+
+jobs:
+  run-summary:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install feedparser openai
+
+      - name: Run summary script
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python news_summary.py
