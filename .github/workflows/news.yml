@@ -1,9 +1,10 @@
 name: Daily AI News Summary
 
 on:
+　workflow_dispatch:       # 手動実行も可能
   schedule:
     - cron: "0 21 * * *"   # 日本時間の朝6時（UTC 21時）
-  workflow_dispatch:       # 手動実行も可能
+
 
 jobs:
   run-summary:
