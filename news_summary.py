@@ -1,8 +1,9 @@
 import feedparser
-from openai import OpenAI
+import google.generativeai as genai
 import os
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Gemini APIキー設定
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 RSS_FEEDS = [
     "https://news.yahoo.co.jp/rss/topics/it.xml",
@@ -21,14 +22,13 @@ def fetch_news():
 def summarize(text):
     prompt = f"以下のニュースを3行で要約してください:\n{text}"
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(prompt)
 
-    return response.choices[0].message.content
+    return response.text
 
 if __name__ == "__main__":
     news = fetch_news()
     summary = summarize(news)
     print(summary)
+
