@@ -1,8 +1,8 @@
 import feedparser
-import openai
+from openai import OpenAI
 import os
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 RSS_FEEDS = [
     "https://news.yahoo.co.jp/rss/topics/it.xml",
@@ -20,14 +20,15 @@ def fetch_news():
 
 def summarize(text):
     prompt = f"以下のニュースを3行で要約してください:\n{text}"
-    response = openai.ChatCompletion.create(
+
+    response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
-    return response.choices[0].message["content"]
+
+    return response.choices[0].message.content
 
 if __name__ == "__main__":
     news = fetch_news()
     summary = summarize(news)
     print(summary)
-
