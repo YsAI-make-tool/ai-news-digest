@@ -1,4 +1,4 @@
-name: AI News Digest
+name: Daily News digest
 
 on:
   schedule:
